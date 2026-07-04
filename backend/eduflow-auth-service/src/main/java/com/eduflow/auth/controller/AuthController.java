@@ -2,6 +2,7 @@ package com.eduflow.auth.controller;
 
 import com.eduflow.auth.dto.LoginRequest;
 import com.eduflow.auth.dto.LoginResponse;
+import com.eduflow.auth.dto.RegisterRequest;
 import com.eduflow.auth.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,10 @@ public class AuthController {
     public AuthController( AuthService authService){
         this.authService = authService;
     }
-
+    @PostMapping("/test")
+    public String test(){
+        return "Hello World";
+    }
     @PostMapping("/login")
     public LoginResponse login(@Valid @RequestBody LoginRequest request){
         String token = authService.login(
@@ -35,5 +39,13 @@ public class AuthController {
         return new LoginResponse(null, "Login Failed");
     }
 
+    @PostMapping("register")
+    public String register(@Valid @RequestBody RegisterRequest registerRequest){
+        return authService.register(
+                registerRequest.getEmail(),
+                registerRequest.getPassword(),
+                registerRequest.getRole()
+        );
+    }
 
 }

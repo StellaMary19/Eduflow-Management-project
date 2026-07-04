@@ -1,0 +1,195 @@
+<h2 mat-dialog-title>
+  {{ data.mode === 'create' ? 'Add Student' : 'Edit Student' }}
+</h2>
+
+<mat-dialog-content>
+
+  <form [formGroup]="studentForm" id="studentForm">
+
+    <!-- First Name -->
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>First Name</mat-label>
+
+      <input
+        matInput
+        type="text"
+        formControlName="firstName"
+        placeholder="Enter First Name">
+
+      @if(studentForm.controls.firstName.touched &&
+          studentForm.controls.firstName.hasError('required')){
+        <mat-error>
+          First Name is required
+        </mat-error>
+      }
+
+    </mat-form-field>
+
+    <!-- Last Name -->
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Last Name</mat-label>
+
+      <input
+        matInput
+        type="text"
+        formControlName="lastName"
+        placeholder="Enter Last Name">
+
+    </mat-form-field>
+
+    <!-- Phone Number -->
+
+    <mat-form-field appearance="outline" class="w-100">
+
+      <mat-label>Phone Number</mat-label>
+
+      <input
+        matInput
+        type="text"
+        maxlength="10"
+        formControlName="phoneNumber"
+        placeholder="Enter 10-digit Phone Number">
+
+      @if(studentForm.controls.phoneNumber.touched){
+
+        @if(studentForm.controls.phoneNumber.hasError('required')){
+          <mat-error>
+            Phone Number is required
+          </mat-error>
+        }
+
+        @if(studentForm.controls.phoneNumber.hasError('pattern')){
+          <mat-error>
+            Phone Number must contain exactly 10 digits
+          </mat-error>
+        }
+
+      }
+
+    </mat-form-field>
+
+    <!-- Gender -->
+
+    <mat-form-field appearance="outline" class="w-100">
+
+      <mat-label>Gender</mat-label>
+
+      <mat-select formControlName="gender">
+
+        <mat-option value="">Select Gender</mat-option>
+
+        <mat-option value="Male">
+          Male
+        </mat-option>
+
+        <mat-option value="Female">
+          Female
+        </mat-option>
+
+        <mat-option value="Other">
+          Other
+        </mat-option>
+
+      </mat-select>
+
+      @if(studentForm.controls.gender.touched &&
+          studentForm.controls.gender.hasError('required')){
+        <mat-error>
+          Gender is required
+        </mat-error>
+      }
+
+    </mat-form-field>
+
+    <!-- Standard -->
+
+    <mat-form-field appearance="outline" class="w-100">
+
+      <mat-label>Standard</mat-label>
+
+      <mat-select formControlName="standard">
+
+        <mat-option value="">
+          Select Standard
+        </mat-option>
+
+        @for(standard of standards; track standard){
+
+          <mat-option [value]="standard">
+            {{ standard }}
+          </mat-option>
+
+        }
+
+      </mat-select>
+
+      @if(studentForm.controls.standard.touched &&
+          studentForm.controls.standard.hasError('required')){
+        <mat-error>
+          Standard is required
+        </mat-error>
+      }
+
+    </mat-form-field>
+
+    <!-- Section -->
+
+    <mat-form-field appearance="outline" class="w-100">
+
+      <mat-label>Section</mat-label>
+
+      <mat-select formControlName="section">
+
+        <mat-option value="">
+          Select Section
+        </mat-option>
+
+        @for(section of sections; track section){
+
+          <mat-option [value]="section">
+            {{ section }}
+          </mat-option>
+
+        }
+
+      </mat-select>
+
+      @if(studentForm.controls.section.touched &&
+          studentForm.controls.section.hasError('required')){
+        <mat-error>
+          Section is required
+        </mat-error>
+      }
+
+    </mat-form-field>
+
+  </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  <button
+      mat-stroked-button
+      type="button"
+      (click)="cancel()">
+
+      Cancel
+
+  </button>
+
+  <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      form="studentForm"
+      [disabled]="studentForm.invalid">
+
+      {{ data.mode === 'create'
+          ? 'Save Student'
+          : 'Update Student' }}
+
+  </button>
+
+</mat-dialog-actions>
