@@ -7,15 +7,17 @@ import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { StudentForm } from '../../components/student-form/student-form';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-student-list',
   standalone: true,
-  imports: [CommonModule, MatTableModule, RouterLink, MatButtonModule,
+  imports: [CommonModule, MatTableModule, MatButtonModule,
     CommonModule,
   MatTableModule,
   MatButtonModule,
-  MatDialogModule
+  MatDialogModule,
+  MatProgressSpinnerModule
   ],
   templateUrl: './student-list.html',
   styleUrl: './student-list.scss',
@@ -34,6 +36,7 @@ export class StudentList implements OnInit {
   private studentStateService = inject(StudentStateService);
   private dialog = inject(MatDialog);
   students = this.studentStateService.students;
+  loading = this.studentStateService.loading;
 
   ngOnInit(): void {
     this.studentStateService.loadStudents();
@@ -48,6 +51,7 @@ export class StudentList implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if(result){
+
         this.studentStateService.loadStudents();
       }
     })
@@ -74,5 +78,9 @@ export class StudentList implements OnInit {
 
   getStudentValue(student: Student, column: string): string {
     return (student as any)[column] ?? '';
+  }
+
+  deleteStudent(id : number):void{
+    this.studentStateService.deleteStudent(id);
   }
 }

@@ -13,18 +13,19 @@ import { Student } from '../../models/student.model';
 
 @Component({
   selector: 'app-student-form',
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule,
     MatDialogModule
   ],
   templateUrl:'./student-form.html',
-  styleUrl: './student-form.scss',
+  styleUrls: ['./student-form.scss'],
 })
 export class StudentForm implements OnInit {
   private studentState  = inject(StudentStateService);
   private fb  = inject(NonNullableFormBuilder);
   private router = inject(Router)
   private dialogRef = inject(MatDialogRef<StudentForm>);
-  standards = Array.from({length : 10},(_,i) => i+1);
+  standards = Array.from({length : 10},(_,i) => String(i+1));
   sections = Array.from({length:3},(_,i) => String.fromCharCode(65+i));
   studentForm = this.fb.group({
     firstName : ['',[Validators.required]],
@@ -43,21 +44,13 @@ export class StudentForm implements OnInit {
 
   }
   ngOnInit(): void {
+    const student = this.data.student;
 
-  if (this.data.mode === 'edit' && this.data.student) {
-
-    this.studentForm.patchValue({
-      firstName: this.data.student.firstName,
-      lastName: this.data.student.lastName,
-      phoneNumber: this.data.student.phoneNumber,
-      gender: this.data.student.gender,
-      standard: this.data.student.standard,
-      section: this.data.student.section
-    });
-
-  }else{
-
+  if (this.data.mode !== 'edit' || !student) {
+    return;
   }
+
+    this.studentForm.patchValue(student);
 
 }
   saveStudent(){
@@ -66,11 +59,14 @@ export class StudentForm implements OnInit {
       return;
     }
     if(this.data.mode === 'create'){
-      this.studentState.createStudents(this.studentForm.getRawValue());
+      this.studentState.createStudents(this.studentForm?.getRawValue());
     }else{
-
+      if(this.data.student && this.data.student.id !== undefined){
+        this.studentState.updateStudents(this.data.student!.id,this.studentForm.getRawValue());
+      }
+   
     }
-    this.router.navigate(["/students"]);
+    this.dialogRef.close(true);
   }
   cancel(){
     this.dialogRef.close();

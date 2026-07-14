@@ -4,7 +4,7 @@
 
 <mat-dialog-content>
 
-  <form [formGroup]="studentForm" id="studentForm">
+  <form [formGroup]="studentForm" id="studentForm" (ngSubmit)="saveStudent()">
 
     <!-- First Name -->
     <mat-form-field appearance="outline" class="w-100">

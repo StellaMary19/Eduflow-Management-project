@@ -6,9 +6,5 @@ export const studentRoutes : Routes = [
     {
         path : '',
         component : StudentList
-    },
-    {
-        path : 'add',
-        component : StudentForm
     }
 ]

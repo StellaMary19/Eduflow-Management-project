@@ -18,6 +18,8 @@ export class StudentService {
   }
   updateStudent(id : number , student : Student){
     return this.http.put<Student>(`${this.apiUrl}/${id}`,student);
-
+  }
+  deleteStudent(id:number){
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }
